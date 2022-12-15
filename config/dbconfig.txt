@@ -1,0 +1,4 @@
+# Database Configuration
+url = jdbc:mysql://localhost:3306/dog_grooming_salon_app
+username = root
+password = 
