@@ -11,6 +11,10 @@ import java.util.logging.Logger;
 import transfer.Response;
 
 public class ServerApp {
+    
+    private ServerSocket serverSocket;
+    private int port;
+    //List<ProcessRequest> users; // u threads
 
     public static void main(String[] args) {
         ServerApp serverApp = new ServerApp();
@@ -20,7 +24,7 @@ public class ServerApp {
 
     private void startServer() {
         try {
-            ServerSocket serverSocket = new ServerSocket(9000);
+            serverSocket = new ServerSocket(9000);
             System.out.println("Waiting on clients...");
             Socket socket = serverSocket.accept();
             System.out.println("Client connected.");
