@@ -52,12 +52,12 @@
             <Property name="text" type="java.lang.String" value="Appointments"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+            <MenuItem class="javax.swing.JMenuItem" name="mniAppointments">
               <Properties>
                 <Property name="text" type="java.lang.String" value="View Appointments"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem2ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniAppointmentsActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -67,12 +67,12 @@
             <Property name="text" type="java.lang.String" value="Owners"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
+            <MenuItem class="javax.swing.JMenuItem" name="mniPersons">
               <Properties>
                 <Property name="text" type="java.lang.String" value="View Owners"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem5ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniPersonsActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -82,12 +82,12 @@
             <Property name="text" type="java.lang.String" value="Dogs"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
+            <MenuItem class="javax.swing.JMenuItem" name="mniDogs">
               <Properties>
                 <Property name="text" type="java.lang.String" value="View Dogs"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem6ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniDogsActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -97,12 +97,12 @@
             <Property name="text" type="java.lang.String" value="Salons"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem7">
+            <MenuItem class="javax.swing.JMenuItem" name="mniSalons">
               <Properties>
                 <Property name="text" type="java.lang.String" value="View Salons"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem7ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniSalonsActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -112,7 +112,7 @@
             <Property name="text" type="java.lang.String" value="Price Rates Information"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
+            <MenuItem class="javax.swing.JMenuItem" name="mniPrices">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Prices"/>
               </Properties>
@@ -124,7 +124,7 @@
             <Property name="text" type="java.lang.String" value=" About"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+            <MenuItem class="javax.swing.JMenuItem" name="mniSoftware">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Software"/>
               </Properties>
@@ -160,9 +160,15 @@
           <Group type="102" attributes="0">
               <EmptySpace pref="200" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="lblCurrentUser" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="btnLogOut" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace pref="200" max="32767" attributes="0"/>
           </Group>
@@ -176,7 +182,10 @@
               <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblCurrentUser" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnLogOut" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace pref="210" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -196,12 +205,17 @@
         <Property name="text" type="java.lang.String" value="Currently loggen in as:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
+    <Component class="javax.swing.JLabel" name="lblCurrentUser">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="2"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Current User"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnLogOut">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Log out"/>
       </Properties>
     </Component>
   </SubComponents>

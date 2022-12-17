@@ -8,6 +8,9 @@ import commonlib.domain.User;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -22,7 +25,6 @@ public class LoginForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         lblUsernameError.setVisible(false);
         lblPasswordError.setVisible(false);
-        users = getAllUsersFromDatabase();
     }
 
     /**
@@ -43,11 +45,6 @@ public class LoginForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnLogin.setText("Login");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
-        });
 
         lblUsername.setText("Username");
 
@@ -98,17 +95,6 @@ public class LoginForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        
-        boolean valid = validateCredentials(username, password);
-        
-        MainForm mf = new MainForm();
-        mf.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_btnLoginActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
@@ -120,23 +106,70 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
-    public void loginAddActionListener(ActionListener actionListener) {
+    public JButton getBtnLogin() {
+        return btnLogin;
+    }
+
+    public void setBtnLogin(JButton btnLogin) {
+        this.btnLogin = btnLogin;
+    }
+
+    public JLabel getLblPassword() {
+        return lblPassword;
+    }
+
+    public void setLblPassword(JLabel lblPassword) {
+        this.lblPassword = lblPassword;
+    }
+
+    public JLabel getLblPasswordError() {
+        return lblPasswordError;
+    }
+
+    public void setLblPasswordError(JLabel lblPasswordError) {
+        this.lblPasswordError = lblPasswordError;
+    }
+
+    public JLabel getLblUsername() {
+        return lblUsername;
+    }
+
+    public void setLblUsername(JLabel lblUsername) {
+        this.lblUsername = lblUsername;
+    }
+
+    public JLabel getLblUsernameError() {
+        return lblUsernameError;
+    }
+
+    public void setLblUsernameError(JLabel lblUsernameError) {
+        this.lblUsernameError = lblUsernameError;
+    }
+
+    public JTextField getTxtPassword() {
+        return txtPassword;
+    }
+
+    public void setTxtPassword(JTextField txtPassword) {
+        this.txtPassword = txtPassword;
+    }
+
+    public JTextField getTxtUsername() {
+        return txtUsername;
+    }
+
+    public void setTxtUsername(JTextField txtUsername) {
+        this.txtUsername = txtUsername;
+    }
+    
+    //|
+    //|-----------------------------------------------------
+    //|
+    
+
+     public void btnLoginActionListener(ActionListener actionListener) {
         btnLogin.addActionListener(actionListener);
     }
-
-    private boolean validateCredentials(String username, String password) {
-        if(!username.equals("") && !password.equals("")){
-            
-        }
-        return false;
-    }
-
-    private List<User> getAllUsersFromDatabase() {
-        List<User> users = new ArrayList<>();
-        
-        
-        
-        return users;
-    }
+    
 }
        

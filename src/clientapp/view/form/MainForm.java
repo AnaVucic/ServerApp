@@ -4,7 +4,12 @@
  */
 package clientapp.view.form;
 
+import java.awt.event.ActionListener;
+import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 
 /**
  *
@@ -36,20 +41,21 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblCurrentUser = new javax.swing.JLabel();
+        btnLogOut = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        mniAppointments = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        mniPersons = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        mniDogs = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
-        jMenuItem7 = new javax.swing.JMenuItem();
+        mniSalons = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
-        jMenuItem8 = new javax.swing.JMenuItem();
+        mniPrices = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        mniSoftware = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -64,68 +70,70 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel2.setText("Currently loggen in as:");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
-        jLabel3.setText("Current User");
+        lblCurrentUser.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
+        lblCurrentUser.setText("Current User");
+
+        btnLogOut.setText("Log out");
 
         jMenu2.setText("Appointments");
 
-        jMenuItem2.setText("View Appointments");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        mniAppointments.setText("View Appointments");
+        mniAppointments.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                mniAppointmentsActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenu2.add(mniAppointments);
 
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Owners");
 
-        jMenuItem5.setText("View Owners");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        mniPersons.setText("View Owners");
+        mniPersons.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                mniPersonsActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem5);
+        jMenu3.add(mniPersons);
 
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Dogs");
 
-        jMenuItem6.setText("View Dogs");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+        mniDogs.setText("View Dogs");
+        mniDogs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
+                mniDogsActionPerformed(evt);
             }
         });
-        jMenu4.add(jMenuItem6);
+        jMenu4.add(mniDogs);
 
         jMenuBar1.add(jMenu4);
 
         jMenu5.setText("Salons");
 
-        jMenuItem7.setText("View Salons");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+        mniSalons.setText("View Salons");
+        mniSalons.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
+                mniSalonsActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem7);
+        jMenu5.add(mniSalons);
 
         jMenuBar1.add(jMenu5);
 
         jMenu6.setText("Price Rates Information");
 
-        jMenuItem8.setText("Prices");
-        jMenu6.add(jMenuItem8);
+        mniPrices.setText("Prices");
+        jMenu6.add(mniPrices);
 
         jMenuBar1.add(jMenu6);
 
         jMenu7.setText(" About");
 
-        jMenuItem4.setText("Software");
-        jMenu7.add(jMenuItem4);
+        mniSoftware.setText("Software");
+        jMenu7.add(mniSoftware);
 
         jMenuBar1.add(jMenu7);
 
@@ -138,9 +146,13 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(200, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(lblCurrentUser)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnLogOut))
+                        .addComponent(jLabel1)))
                 .addContainerGap(200, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -151,71 +163,39 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(60, 60, 60)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCurrentUser)
+                    .addComponent(btnLogOut))
                 .addContainerGap(210, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void mniAppointmentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAppointmentsActionPerformed
         AppointmentsForm af = new AppointmentsForm();
         af.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_mniAppointmentsActionPerformed
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    private void mniPersonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPersonsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_mniPersonsActionPerformed
 
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+    private void mniDogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniDogsActionPerformed
         DogsForm df = new DogsForm();
         df.setVisible(true);
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
+    }//GEN-LAST:event_mniDogsActionPerformed
 
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+    private void mniSalonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSalonsActionPerformed
         SalonForm sf = new SalonForm();
         sf.setVisible(true);
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+    }//GEN-LAST:event_mniSalonsActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainForm().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLogOut;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -225,16 +205,67 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupMenu3;
     private javax.swing.JPopupMenu jPopupMenu4;
+    private javax.swing.JLabel lblCurrentUser;
+    private javax.swing.JMenuItem mniAppointments;
+    private javax.swing.JMenuItem mniDogs;
+    private javax.swing.JMenuItem mniPersons;
+    private javax.swing.JMenuItem mniPrices;
+    private javax.swing.JMenuItem mniSalons;
+    private javax.swing.JMenuItem mniSoftware;
     // End of variables declaration//GEN-END:variables
+
+
+    public JButton getBtnLogOut() {
+        return btnLogOut;
+    }
+
+    public void setBtnLogOut(JButton btnLogOut) {
+        this.btnLogOut = btnLogOut;
+    }
+
+    public JLabel getLblCurrentUser() {
+        return lblCurrentUser;
+    }
+
+    public void setLblCurrentUser(JLabel lblCurrentUser) {
+        this.lblCurrentUser = lblCurrentUser;
+    }
+    
+    //|
+    //|-----------------------------------------------------
+    //|
+    
+    public void mniAppointmentsActionListener (ActionListener actionListener){
+        mniAppointments.addActionListener(actionListener);
+    }
+    
+    public void mniPersonsActionListener (ActionListener actionListener){
+        mniPersons.addActionListener(actionListener);
+    }
+    
+    public void mniDogsActionListener (ActionListener actionListener){
+        mniDogs.addActionListener(actionListener);
+    }
+    
+    public void mniSalonsActionListener (ActionListener actionListener){
+        mniSalons.addActionListener(actionListener);
+    }
+    
+    public void mniPricesActionListener (ActionListener actionListener){
+        mniPrices.addActionListener(actionListener);
+    }
+    
+    public void mniSoftwareActionListener (ActionListener actionListener) {
+        mniSoftware.addActionListener(actionListener);
+    }
+    
+    public void btnLogOutActionListener (ActionListener actionListener) {
+        btnLogOut.addActionListener(actionListener);
+    }
+    
 }
