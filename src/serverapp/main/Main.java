@@ -15,10 +15,10 @@ import serverapp.repository.db.RepositoryDatabaseUser;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        User user = new User(4l, "AnaVucic", "student");
-        Repository<User, Long> repository = new RepositoryDatabaseUser();
-        repository.add(user);
-        ((DatabaseRepository)repository).commit();
+//        User user = new User(4l, "AnaVucic", "student");
+//        Repository<User, Long> repository = new RepositoryDatabaseUser();
+//        repository.add(user);
+//        ((DatabaseRepository)repository).commit();
     }
     
 }

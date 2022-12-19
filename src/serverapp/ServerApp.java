@@ -12,6 +12,10 @@ import transfer.Response;
 
 public class ServerApp {
     
+    //
+    
+    
+    /*
     private ServerSocket serverSocket;
     private int port;
     //List<ProcessRequest> users; // u threads
@@ -21,7 +25,11 @@ public class ServerApp {
         serverApp.startServer();
 
     }
-
+    */
+    
+    
+    
+    /*
     private void startServer() {
         try {
             serverSocket = new ServerSocket(9000);
@@ -64,4 +72,7 @@ public class ServerApp {
     private Object handleResponseObject(Request request) {
         return null;
     }
+    
+    */
+    
 }

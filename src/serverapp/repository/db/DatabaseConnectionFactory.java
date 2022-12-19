@@ -12,16 +12,16 @@ import java.io.FileInputStream;
  *
  * @author Lenovo
  */
-public class DatabaseConnectionFacotry {
+public class DatabaseConnectionFactory {
     private Connection connection;
-    private static DatabaseConnectionFacotry instance;
+    private static DatabaseConnectionFactory instance;
 
-    private DatabaseConnectionFacotry() {
+    private DatabaseConnectionFactory() {
     }
 
-    public static DatabaseConnectionFacotry getInstance() {
+    public static DatabaseConnectionFactory getInstance() {
         if (instance == null) {
-            instance = new DatabaseConnectionFacotry();
+            instance = new DatabaseConnectionFactory();
         }
         return instance;
     }

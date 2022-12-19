@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface Repository<T, K> {
 
-    void add(T param) throws Exception;
+    Long add(T param) throws Exception;
 
     void edit(T param) throws Exception;
 
@@ -24,6 +24,6 @@ public interface Repository<T, K> {
 
     List<T> getAll(T param) throws Exception;
 
-    T getOne(K id) throws Exception;
+    T getOne(T param) throws Exception;
 
 }
