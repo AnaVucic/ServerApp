@@ -10,6 +10,10 @@ import commonlib.domain.Appointment;
 import commonlib.domain.Salon;
 import java.util.List;
 import clientapp.communication.Communication;
+import clientapp.view.constants.Constant;
+import clientapp.view.coordinator.MainCoordinator;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,7 +32,22 @@ public class AppointmentsController {
     }
 
     private void addActionListeners() {
-
+        appointmentsForm.btnAddAppointmentActionListener(new ActionListener() { 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int rowIndex = appointmentsForm.getTblAppointments().getSelectedRow();
+                if(rowIndex >= 0) {
+                    Long id = (Long) appointmentsForm.getTblAppointments().getValueAt(rowIndex, 0);
+                    for (Appointment a : appointments) {
+                        if(a.getAppointmentID() == id) {
+                            MainCoordinator.getInstance().addParam(Constant.SELECTED_APPOINTMENT, a);
+                            //MainCoordinator.getInstance().open
+                        }
+                    }
+                }
+                
+            }
+        });
     }
 
     public void openForm() {

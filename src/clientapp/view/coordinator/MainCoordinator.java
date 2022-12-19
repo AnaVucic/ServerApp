@@ -1,4 +1,3 @@
-
 package clientapp.view.coordinator;
 
 import clientapp.view.controller.AppointmentsController;
@@ -20,6 +19,8 @@ public class MainCoordinator {
     private final MainController mainController;
 
     private AppointmentsController appointmentsListener;
+    
+    
     
     private final Map<String, Object> params;
 
@@ -58,9 +59,15 @@ public class MainCoordinator {
     public MainController getMainController() {
         return mainController;
     }
-
+    
+    // APPOINTMENT FORM
     public void openAppointmentsForm() {
         AppointmentsController appointmentController = new AppointmentsController(new AppointmentsForm());
         appointmentController.openForm();
+    }
+    
+    // EDIT APPOINTMENT FORM
+    public void openEditAppointmentForm() {
+        
     }
 }

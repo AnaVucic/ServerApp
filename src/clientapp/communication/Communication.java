@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package clientapp.communication;
 
 import commonlib.domain.Appointment;
+import commonlib.domain.Service;
 import commonlib.domain.User;
 import java.net.Socket;
 import java.util.List;
@@ -73,6 +70,36 @@ public class Communication {
         Response response = (Response) receiver.receive();
         if(response.getException() == null) {
             return (List<Appointment>) response.getResult();
+        } else {
+            throw response.getException();
+        }
+    }
+    
+    // SAVE APPOINTMENT
+    public Appointment saveAppointment(Appointment a) throws Exception {
+        Request request = new Request(Operation.SAVE_APPOINTMENT, a);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        
+        if(response.getException() == null) {
+            Long index = (Long) response.getResult();
+            a.setAppointmentID(index);
+            return a;
+        } else {
+            throw response.getException();
+        }
+    }
+    
+    
+    // GET SERVICE
+    public Service getService(String name) throws Exception {
+        Request request = new Request(Operation.FIND_SERVICE, name);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        
+        if(response.getException() == null) {
+            Service s = (Service) response.getResult();
+            return s;
         } else {
             throw response.getException();
         }
