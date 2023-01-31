@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package serverapp.repository.db.impl;
 
 import commonlib.domain.GenericEntity;
@@ -18,6 +14,7 @@ import java.sql.PreparedStatement;
  *
  * @author Lenovo
  */
+
 public class DatabaseRepositoryGeneric implements DatabaseRepository<GenericEntity, Long>{
 
     @Override
@@ -60,7 +57,18 @@ public class DatabaseRepositoryGeneric implements DatabaseRepository<GenericEnti
 
     @Override
     public void delete(GenericEntity param) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            String query;
+            Connection connection = DatabaseConnectionFactory.getInstance().getConnection();
+            query = "DELETE FROM " + param.getTableName() + " WHERE " + param.getDeleteCondition();
+            System.out.println(query);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            connection.commit();
+            statement.close();
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 
     @Override
