@@ -43,6 +43,7 @@ public class Communication {
         user.setPassword(password);
         Request request = new Request(Operation.LOGIN, user);
         sender.send(request);
+        System.out.println("sent");
         Response response = (Response) receiver.receive();
         if (response.getException() == null) {
             return (User) response.getResult();
@@ -93,7 +94,7 @@ public class Communication {
     
     // GET SERVICE
     public Service getService(String name) throws Exception {
-        Request request = new Request(Operation.FIND_SERVICE, name);
+        Request request = new Request(Operation.FIND_SERVICES, name);
         sender.send(request);
         Response response = (Response) receiver.receive();
         

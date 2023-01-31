@@ -44,9 +44,9 @@ public class LoginController {
                     String password = loginForm.getTxtPassword().getText().trim();
 
                     validateForm(username, password);
+                    
 
                     User user = Communication.getInstance().login(username, password);
-
                     JOptionPane.showMessageDialog(loginForm, "User " + user.getUsername()
                             + " logged in!",
                             "Login", JOptionPane.INFORMATION_MESSAGE);
