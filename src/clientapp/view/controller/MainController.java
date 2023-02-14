@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package clientapp.view.controller;
 
 import clientapp.view.coordinator.MainCoordinator;
@@ -11,10 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import clientapp.view.constants.Constant;
 
-/**
- *
- * @author Lenovo
- */
 public class MainController {
     
     private final MainForm mainForm;
@@ -25,11 +17,10 @@ public class MainController {
     }
     
     public void openForm() {
-        mainForm.setTitle("Main menu");
         User user = (User) MainCoordinator.getInstance().getParam(Constant.LOGGED_IN_USER);
-        mainForm.getLblCurrentUser().setText("Logged in user: " + user.getUsername());
         mainForm.setLocationRelativeTo(null);
         mainForm.setVisible(true);
+        mainForm.getLblCurrentUser().setText(user.getUsername());
     }
     
     public MainForm getMainForm() {
@@ -43,6 +34,9 @@ public class MainController {
                 MainCoordinator.getInstance().openAppointmentsForm();
             }
         });
+        
+        
+        
     }
     
 }

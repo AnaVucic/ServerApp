@@ -14,6 +14,8 @@ import clientapp.view.constants.Constant;
 import clientapp.view.coordinator.MainCoordinator;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -51,35 +53,39 @@ public class AppointmentsController {
     }
 
     public void openForm() {
+        appointmentsForm.setVisible(true);
         prepareView();
 
     }
 
     private void prepareView() {
-        fillComboSalon();
+        //fillComboSalon(); // ovo ne radi, dodaj kasnije
+        fillTableAppointments();
     }
 
     private void fillComboSalon() {
-        appointmentsForm.getCmbSalon().removeAllItems();
-        appointmentsForm.getCmbSalon().setEnabled(false);
-        appointmentsForm.getCmbSalon().insertItemAt(null, 0);
-        for (Salon s : salons) {
-            appointmentsForm.getCmbSalon().addItem(s.toString());
+        try {
+            appointmentsForm.getCmbSalon().removeAllItems();
+            appointmentsForm.getCmbSalon().setEnabled(false);
+            appointmentsForm.getCmbSalon().insertItemAt(null, 0);
+            salons = Communication.getInstance().getAllSalons();
+            for (Salon s : salons) {
+                appointmentsForm.getCmbSalon().addItem(s.toString());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(AppointmentsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    private void setupComponents() {
-        fillAppointmentTable(); //add date requirement whitch is from today into the future
     }
 
-    private void fillAppointmentTable() {
+    private void fillTableAppointments() {
         try {
-        appointments = Communication.getInstance().getAllAppointments();
-        AppointmentTableModel model = new AppointmentTableModel(appointments);
-        appointmentsForm.getTblAppointments().setModel(model);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(appointmentsForm, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            appointments = Communication.getInstance().getAllAppointments();
+            AppointmentTableModel model = new AppointmentTableModel(appointments);
+            appointmentsForm.getTblAppointments().setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(appointmentsForm, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
         }
-    } 
+    }
 
 }

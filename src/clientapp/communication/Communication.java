@@ -1,6 +1,7 @@
 package clientapp.communication;
 
 import commonlib.domain.Appointment;
+import commonlib.domain.Salon;
 import commonlib.domain.Service;
 import commonlib.domain.User;
 import java.net.Socket;
@@ -11,10 +12,6 @@ import transfer.Request;
 import transfer.Response;
 import transfer.Sender;
 
-/**
- *
- * @author Lenovo
- */
 public class Communication {
     
     private final Sender sender;
@@ -27,7 +24,7 @@ public class Communication {
         receiver = new Receiver(socket);
     }
 
-    // GET_INSTANCE
+    // GET INSTANCE
     public static Communication getInstance() throws Exception {
         if (instance == null) {
             instance = new Communication();
@@ -100,6 +97,22 @@ public class Communication {
         
         if(response.getException() == null) {
             Service s = (Service) response.getResult();
+            return s;
+        } else {
+            throw response.getException();
+        }
+    }
+    
+    // GET ALL SALONS
+     public List<Salon> getAllSalons() throws Exception {
+        Request request = new Request(Operation.GET_ALL_SALONS, null);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        
+        if(response.getException() == null) {
+            List<Salon> s = (List<Salon>) response.getResult();
+            for(Salon salon : s)
+                System.out.print(salon);
             return s;
         } else {
             throw response.getException();

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package clientapp.view.controller;
 
 import clientapp.view.constants.Constant;
@@ -15,10 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Lenovo
- */
+
 public class LoginController {
 
     private final LoginForm loginForm;
@@ -34,18 +27,15 @@ public class LoginController {
     }
 
     private void addActionListeners() {
+        
         loginForm.btnLoginActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     resetForm();
-
                     String username = loginForm.getTxtUsername().getText().trim();
                     String password = loginForm.getTxtPassword().getText().trim();
-
                     validateForm(username, password);
-                    
-
                     User user = Communication.getInstance().login(username, password);
                     JOptionPane.showMessageDialog(loginForm, "User " + user.getUsername()
                             + " logged in!",
@@ -57,15 +47,12 @@ public class LoginController {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
             private void resetForm() {
                 loginForm.getLblUsernameError().setText("");
                 loginForm.getLblPasswordError().setText("");
             }
-
             private void validateForm(String username, String password) throws Exception {
                 String errorMessage = "";
-
                 if (username.isEmpty()) {
                     loginForm.getLblUsernameError().setText("Username must be entered!");
                     errorMessage += "Username must be entered!\n";
@@ -74,17 +61,17 @@ public class LoginController {
                     loginForm.getLblPasswordError().setText("Password must be entered!");
                     errorMessage += "Password must be entered!\n";
                 }
-
                 if (!errorMessage.isEmpty()) {
                     throw new Exception(errorMessage);
                 }
             }
-
             private void clearInput() {
                 loginForm.getTxtUsername().setText("");
                 loginForm.getTxtPassword().setText("");
             }
         });
+        
+        
     }
 
 }
