@@ -6,12 +6,11 @@ package serverapp.threads;
 
 import commonlib.domain.GenericEntity;
 import commonlib.domain.User;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.List;
 import serverapp.controller.Controller;
-import serverapp.view.coordinator.MainCoordinator;
+import serverapp.session.Session;
 import transfer.Receiver;
 import transfer.Request;
 import transfer.Response;
@@ -50,12 +49,44 @@ public class ProcessRequests extends Thread {
                 Response response = new Response();
                 try {
 
-                    
-                    
-                    
-                    
-                    
-                    
+                    switch (request.getOperation()) {
+                        case LOGIN:
+                            try {
+                                GenericEntity object = Controller.getInstance().login((GenericEntity) request.getParam());
+
+                                if (Session.getInstance().getAllUsers().contains(object)) {
+                                    response.setException(new Exception("User "
+                                        + object + " is already logged in!\n"));
+                                } else {
+                                    response.setResult(object);
+                                    user = (User) object;
+                                    Session.getInstance().addUser(user);
+                                    //MainCoordinator.getInstance().getFormMainController().refreshTbl();
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                response.setException(ex);
+                            }
+                        break;
+                        case GET_ALL_SALONS:
+                            try {
+                                List<GenericEntity> salons = Controller.getInstance().getAllSalons();
+                                response.setResult(salons);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            response.setException(ex);
+                        }
+                        break;
+                        case GET_ALL_APPOINTMENTS:
+                            try {
+                            List<GenericEntity> appointments = Controller.getInstance().getAllAppointments();
+                            response.setResult(appointments);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            response.setException(e);
+                        }
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     response.setException(e);
@@ -72,7 +103,7 @@ public class ProcessRequests extends Thread {
                     //Logger.getLogger(ProcessRequests.class.getName()).log(Level.SEVERE, "Error while logging out the user", ex);
                 }
             } catch (Exception ex) {
-                //Logger.getLogger(ProcessRequests.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
         }
     }

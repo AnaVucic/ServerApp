@@ -14,8 +14,7 @@ import java.sql.PreparedStatement;
  *
  * @author Lenovo
  */
-
-public class DatabaseRepositoryGeneric implements DatabaseRepository<GenericEntity, Long>{
+public class DatabaseRepositoryGeneric implements DatabaseRepository<GenericEntity, Long> {
 
     @Override
     public Long add(GenericEntity param) throws Exception {
@@ -73,22 +72,25 @@ public class DatabaseRepositoryGeneric implements DatabaseRepository<GenericEnti
 
     @Override
     public List<GenericEntity> getAll() throws Exception {
-         return null;
+        return null;
     }
 
     @Override
     public List<GenericEntity> getAll(GenericEntity param) throws Exception {
-         List<GenericEntity> list = null;
+        List<GenericEntity> list = null;
 
         try {
             Connection connection = DatabaseConnectionFactory.getInstance().getConnection();
             String query = "SELECT * FROM " + param.getTableName();
-            System.out.println(query);
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
+
             list = param.getList(resultSet);
             resultSet.close();
             statement.close();
+            System.out.println(query);
+
             return list;
         } catch (SQLException ex) {
             throw ex;
@@ -114,6 +116,22 @@ public class DatabaseRepositoryGeneric implements DatabaseRepository<GenericEnti
         }
     }
 
-    
-    
+    @Override
+    public List<GenericEntity> getByCondition(GenericEntity param) throws Exception {
+        List<GenericEntity> list = null;
+        try {
+            Connection connection = DatabaseConnectionFactory.getInstance().getConnection();
+            String query = "SELECT * FROM " + param.getTableName() + " WHERE " + param.getSelectCondition();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            list = param.getList(resultSet);
+            resultSet.close();
+            statement.close();
+            return list;
+        } catch (Exception ex) {
+            throw ex;
+        }
+
+    }
+
 }

@@ -4,7 +4,11 @@
  */
 package serverapp.view.controller;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import serverapp.controller.Controller;
 import serverapp.view.form.MainForm;
 
 /**
@@ -20,10 +24,15 @@ public class MainController {
         
     }
     
-    public void openForm(){
-        mainForm.setLocationRelativeTo(null);
-        mainForm.setVisible(true);
-        mainForm.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    public void openForm() {
+        try {
+            mainForm.setLocationRelativeTo(null);
+            mainForm.setVisible(true);
+            mainForm.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            Controller.getInstance().startServer();
+        } catch (IOException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
     

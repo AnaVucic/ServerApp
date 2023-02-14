@@ -4,6 +4,7 @@
  */
 package serverapp.repository;
 
+import commonlib.domain.GenericEntity;
 import java.util.List;
 
 /**
@@ -25,5 +26,8 @@ public interface Repository<T, K> {
     List<T> getAll(T param) throws Exception;
 
     T getOne(T param) throws Exception;
+    
+    List<T> getByCondition (T param) throws Exception;
+    
 
 }

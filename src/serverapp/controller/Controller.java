@@ -1,16 +1,24 @@
 package serverapp.controller;
 
+import commonlib.domain.Appointment;
 import commonlib.domain.Dog;
 import commonlib.domain.GenericEntity;
+import commonlib.domain.Salon;
+import java.io.IOException;
 import java.util.List;
+import serverapp.constant.Constant;
 import serverapp.operation.GenericOperation;
+import serverapp.operation.appointment.GetAllAppointments;
 import serverapp.operation.dog.FindDogs;
 import serverapp.operation.dog.GetAllDogs;
 import serverapp.operation.dog.SaveDog;
+import serverapp.operation.salon.GetAllSalons;
 import serverapp.operation.user.Login;
 import serverapp.repository.Repository;
 import serverapp.repository.db.impl.DatabaseRepositoryGeneric;
 import serverapp.server.Server;
+import serverapp.session.Session;
+import serverapp.util.PropertiesLoader;
 
 /**
  *
@@ -63,13 +71,41 @@ public class Controller {
         return ((FindDogs) genericOperation).getList();
     }
     
+    // GET ONE DOG
+    //public GenericEntity getEntity
+    
     // EDIT DOG?
     
     // GET ALL APPOINTMENTS
+    public List<GenericEntity> getAllAppointments() throws Exception {
+        GenericOperation genericOperation = new GetAllAppointments();
+        genericOperation.execute(new Appointment());
+        return ((GetAllAppointments) genericOperation).getList();
+    }
     
     // SAVE APPOINTMENT
     
     // FIND APPOINTMENTS
     
     // EDIT APPOINTMENTS
+    
+    // GET ALL SALONS
+    public List<GenericEntity> getAllSalons() throws Exception {
+        GenericOperation genericOperation = new GetAllSalons();
+        genericOperation.execute(new Salon());
+        return ((GetAllSalons) genericOperation).getList();
+    }
+    
+    //...
+    
+    
+    public void startServer() throws IOException {
+        server = new Server(Integer.parseInt(PropertiesLoader.getInstance().getProperty(Constant.SERVER_PORT)));
+        server.start();
+    }
+
+    public void stopServer() throws IOException {
+        server.stopServer();
+        Session.getInstance().logoutAllUsers();
+    }
 }
