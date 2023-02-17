@@ -156,6 +156,7 @@ public class Communication {
         }
     }
 
+    // GET ALL PERSONS
     public List<Person> getAllPersons() throws Exception {
         Request request = new Request(Operation.GET_ALL_PERSONS, null);
         sender.send(request);
@@ -164,6 +165,19 @@ public class Communication {
         if (response.getException() == null) {
             List<Person> p = (List<Person>) response.getResult();
             return p;
+        } else {
+            throw response.getException();
+        }
+    }
+    
+    //UPDATE APPOINTMENT
+    public void editAppointment(Appointment appointment) throws Exception {
+        Request request = new Request(Operation.EDIT_APPOINTMENT, appointment);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        
+        if(response.getException() == null){
+            
         } else {
             throw response.getException();
         }

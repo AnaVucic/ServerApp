@@ -1,18 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package clientapp.view.controller;
 
 import clientapp.communication.Communication;
 import clientapp.view.form.EditAppointmentForm;
 import commonlib.domain.Appointment;
+import commonlib.domain.AppointmentService;
 import commonlib.domain.Dog;
 import commonlib.domain.Person;
 import commonlib.domain.Salon;
 import commonlib.domain.Service;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +32,7 @@ public class EditAppointmentController {
     private List<Person> persons;
     private List<Dog> dogs;
     private List<Salon> salons;
+    private List<Service> services;
 
     public EditAppointmentController(EditAppointmentForm editAppointmentForm) {
         this.form = editAppointmentForm;
@@ -41,12 +45,23 @@ public class EditAppointmentController {
             public void actionPerformed(ActionEvent e) {
                 try {
                     validateAppointment();
-                    Appointment a = generateAppointment(new Appointment());
-                    //Appointment savedAppointment = Communication.getInstance().saveAppointment(a);
-                    //JOptionPane.showMessageDialog(editAppointmentForm, "System has saved appointment with ID: " + savedAppointment.getAppointmentID() + "!", "Message", JOptionPane.INFORMATION_MESSAGE);
-
+                    generateAppointment();
+                    Communication.getInstance().editAppointment(appointment);
+                    for(Service s:appointment.getServices()){
+                        AppointmentService as = new AppointmentService();
+                        as.setAppointment(appointment.getAppointmentID());
+                        as.setService(s.getServiceID());
+                        
+                    }
+                    //Communication.getInstance().editAppointmentService();
+                    JOptionPane.showMessageDialog(form, "System has changed appointment with ID: " + appointment.getAppointmentID() + "!", "Message", JOptionPane.INFORMATION_MESSAGE);
+                    form.dispose();
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(form, "Invaid date and/or time input(s)" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 } catch (Exception ex) {
-                    Logger.getLogger(EditAppointmentController.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(form, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
@@ -104,17 +119,54 @@ public class EditAppointmentController {
         }
     }
 
-    private Appointment generateAppointment(Appointment a) {
+    private void generateAppointment() throws ParseException, Exception {
+        String dateTimeString = form.getTxtDate().getText() + " " + form.getTxtTime().getText();
+        Date dateTime;
+        try {
+            dateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateTimeString);
+        } catch (ParseException ex) {
+            throw ex;
+        }
+        appointment.setDateTime(dateTime.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime());
 
-        //
-        // impl services and dateTime
-        //
-        a.setDog((Dog) form.getCmbDog().getSelectedItem());
-        a.setSalon((Salon) form.getCmbSalon().getSelectedItem());
-        //a.setServices(services);
-        a.setAppointmentID(Long.MIN_VALUE);
+        appointment.setDog((Dog) form.getCmbDog().getSelectedItem());
+        appointment.setSalon((Salon) form.getCmbSalon().getSelectedItem());
 
-        return a;
+        List<Service> newServices = new ArrayList<Service>();
+        if (form.getChkBath().isSelected()) {
+            newServices.add(services.get(0));
+        }
+        if (form.getChkTrim().isSelected()) {
+            newServices.add(services.get(1));
+        }
+        if (form.getChkNail().isSelected()) {
+            newServices.add(services.get(2));
+        }
+        if (form.getChkEar().isSelected()) {
+            newServices.add(services.get(3));
+        }
+        if (form.getChkTeeth().isSelected()) {
+            newServices.add(services.get(4));
+        }
+        if (form.getChkStyle().isSelected()) {
+            newServices.add(services.get(5));
+        }
+        if (newServices.size() == 0) {
+            throw new Exception("Choose at least one service.");
+        }
+        appointment.setServices(newServices);
+        int duration = 0;
+        BigDecimal fee = new BigDecimal(0);
+        for (Service s : appointment.getServices()) {
+            duration += s.getDuration();
+            fee = fee.add(s.getFee());
+        }
+        System.out.println("Duration: " + duration);
+        System.out.println("Fee: " + fee);
+        appointment.setTotalDuration(duration);
+        appointment.setTotalFee(fee);
     }
 
     public void openForm() {
@@ -137,6 +189,7 @@ public class EditAppointmentController {
 
     private void prepareForm() {
         form.getTxtAppointmentId().setText(appointment.getAppointmentID().toString());
+        getServices();
         prepareServices();
         perpareComboBoxes();
     }
@@ -233,13 +286,21 @@ public class EditAppointmentController {
                 + appointment.getDateTime().getMonth().getValue() + "/"
                 + appointment.getDateTime().getYear();
         form.getTxtDate().setText(date);
-        String time = appointment.getDateTime().getHour() + ":" +
-                appointment.getDateTime().getMinute();
+        String time = appointment.getDateTime().getHour() + ":"
+                + appointment.getDateTime().getMinute();
         form.getTxtTime().setText(time);
     }
 
     private void fillFieldsDurationFee() {
         form.getTxtTotalDuration().setText(String.valueOf(appointment.getTotalDuration()));
         form.getTxtTotalFee().setText(appointment.getTotalFee().toString());
+    }
+
+    private void getServices() {
+        try {
+            services = Communication.getInstance().getAllServices();
+        } catch (Exception ex) {
+            System.out.println("Exception while getting esrvices. " + ex.getMessage());
+        }
     }
 }

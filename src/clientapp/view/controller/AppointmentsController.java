@@ -67,8 +67,13 @@ public class AppointmentsController {
         form.btnEditAppointmentActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Long id = (Long) form.getTblAppointments().getValueAt(form.getTblAppointments().getSelectedRow(), 0);
-                MainCoordinator.getInstance().openEditAppointmentForm(id);
+                int row = form.getTblAppointments().getSelectedRow();
+                if (row != -1) {
+                    Long id = (Long) form.getTblAppointments().getValueAt(row, 0);
+                    MainCoordinator.getInstance().openEditAppointmentForm(id);
+                } else {
+                    JOptionPane.showMessageDialog(form, "You must select an appointment to edit.","Select an appointment",JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
     }
