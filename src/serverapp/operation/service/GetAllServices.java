@@ -2,11 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package serverapp.operation.dog;
+package serverapp.operation.service;
 
-import commonlib.domain.Dog;
 import commonlib.domain.GenericEntity;
-import commonlib.domain.Person;
+import commonlib.domain.Service;
 import java.util.List;
 import serverapp.operation.GenericOperation;
 
@@ -14,31 +13,26 @@ import serverapp.operation.GenericOperation;
  *
  * @author Lenovo
  */
-public class GetAllDogs extends GenericOperation {
+public class GetAllServices extends GenericOperation {
 
     private List<GenericEntity> list;
 
     @Override
     protected void preconditions(Object param) throws Exception {
-        if (!(param instanceof Dog)) {
+        if (!(param instanceof Service)) {
             throw new Exception("Invalid object");
         }
     }
 
     @Override
     protected void executeOperation(Object param) throws Exception {
-        list = repository.getAll((GenericEntity)new Dog());
-
-        for (GenericEntity dogEntity : list) {
-            Dog dog = (Dog) dogEntity;
-
-            GenericEntity entityPerson = (GenericEntity) repository.getOne(dog.getPerson());
-            dog.setPerson((Person) entityPerson);
-            
+        list = repository.getAll((GenericEntity) new Service());
+        for (GenericEntity serviceEntity : list) {
+            Service service = (Service) serviceEntity;
         }
     }
 
-    public List<GenericEntity> getList() {
+    public List<GenericEntity> getList(){
         return list;
     }
 }

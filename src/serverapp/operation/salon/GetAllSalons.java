@@ -1,5 +1,6 @@
 package serverapp.operation.salon;
 
+import commonlib.domain.City;
 import commonlib.domain.GenericEntity;
 import commonlib.domain.Salon;
 import java.util.List;
@@ -18,9 +19,11 @@ public class GetAllSalons extends GenericOperation{
     @Override
     protected void executeOperation(Object param) throws Exception {
         list = repository.getAll((GenericEntity)new Salon());
-        
         for(GenericEntity salonEntity : list){
             Salon salon = (Salon) salonEntity;
+            
+            GenericEntity entityCity = ((List<GenericEntity>) repository.getByCondition(salon.getCity())).get(0);
+            salon.setCity((City) entityCity);
         }
     }
     

@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package serverapp.operation.appointment;
 
 import commonlib.domain.Appointment;
@@ -17,10 +21,10 @@ import serverapp.operation.GenericOperation;
  *
  * @author Lenovo
  */
-public class GetAllAppointments extends GenericOperation {
-    
-    private List<GenericEntity> list;
+public class FindAppointments extends GenericOperation{
 
+    private List<GenericEntity> list;
+    
     @Override
     protected void preconditions(Object param) throws Exception {
         if(!(param instanceof Appointment)){
@@ -30,8 +34,7 @@ public class GetAllAppointments extends GenericOperation {
 
     @Override
     protected void executeOperation(Object param) throws Exception {
-        
-        list = repository.getAll((GenericEntity) new Appointment());
+        list = repository.getByCondition((GenericEntity) param);
         
         for(GenericEntity entity : list) {
             Appointment a = (Appointment) entity;
@@ -71,7 +74,7 @@ public class GetAllAppointments extends GenericOperation {
         }
     }
     
-    public List<GenericEntity> getList() {
+    public List<GenericEntity> getList(){
         return list;
     }
     

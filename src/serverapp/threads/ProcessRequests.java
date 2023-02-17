@@ -52,26 +52,35 @@ public class ProcessRequests extends Thread {
                     switch (request.getOperation()) {
                         case LOGIN:
                             try {
-                                GenericEntity object = Controller.getInstance().login((GenericEntity) request.getParam());
+                            GenericEntity object = Controller.getInstance().login((GenericEntity) request.getParam());
 
-                                if (Session.getInstance().getAllUsers().contains(object)) {
-                                    response.setException(new Exception("User "
+                            if (Session.getInstance().getAllUsers().contains(object)) {
+                                response.setException(new Exception("User "
                                         + object + " is already logged in!\n"));
-                                } else {
-                                    response.setResult(object);
-                                    user = (User) object;
-                                    Session.getInstance().addUser(user);
-                                    //MainCoordinator.getInstance().getFormMainController().refreshTbl();
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                response.setException(ex);
+                            } else {
+                                response.setResult(object);
+                                user = (User) object;
+                                Session.getInstance().addUser(user);
+                                //MainCoordinator.getInstance().getFormMainController().refreshTbl();
                             }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            response.setException(ex);
+                        }
                         break;
                         case GET_ALL_SALONS:
                             try {
-                                List<GenericEntity> salons = Controller.getInstance().getAllSalons();
-                                response.setResult(salons);
+                            List<GenericEntity> salons = Controller.getInstance().getAllSalons();
+                            response.setResult(salons);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            response.setException(ex);
+                        }
+                        break;
+                        case GET_ALL_DOGS:
+                            try {
+                            List<GenericEntity> dogs = Controller.getInstance().getAllDogs();
+                            response.setResult(dogs);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             response.setException(ex);
@@ -85,6 +94,51 @@ public class ProcessRequests extends Thread {
                             e.printStackTrace();
                             response.setException(e);
                         }
+                        break;
+                        case SAVE_APPOINTMENT:
+                            try {
+
+                            Long id = Controller.getInstance().saveAppointment((GenericEntity) request.getParam());
+                            GenericEntity a = (GenericEntity) request.getParam();
+                            a.setID(id);
+
+                            Controller.getInstance().saveServices(a);
+
+                            response.setResult(id);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            response.setException(ex);
+                        }
+                        break;
+                        case GET_ALL_SERVICES:
+                            try {
+                            List<GenericEntity> services = Controller.getInstance().getAllServices();
+                            response.setResult(services);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            response.setException(e);
+                        }
+                        break;
+                        case FIND_APPOINTMENTS:
+                            try {
+                            List<GenericEntity> appointments = Controller.getInstance().findAppointments((GenericEntity) request.getParam());
+                            response.setResult(appointments);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            response.setException(e);
+                        }
+                        break;
+                        case GET_ALL_PERSONS:
+                            try {
+                            List<GenericEntity> persons = Controller.getInstance().getAllPersons();
+                            response.setResult(persons);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            response.setException(e);
+                        }
+                        break;
                     }
 
                 } catch (Exception e) {
