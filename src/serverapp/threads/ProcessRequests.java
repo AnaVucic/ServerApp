@@ -139,6 +139,14 @@ public class ProcessRequests extends Thread {
                             response.setException(e);
                         }
                         break;
+                        case EDIT_APPOINTMENT:
+                            try {
+                            Controller.getInstance().editAppointment((GenericEntity) request.getParam());
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            response.setException(ex);
+                        }
+                        break;
                     }
 
                 } catch (Exception e) {
