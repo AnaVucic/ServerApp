@@ -10,13 +10,14 @@ import commonlib.domain.Appointment;
 import commonlib.domain.Salon;
 import java.util.List;
 import clientapp.communication.Communication;
-import clientapp.view.constants.Constant;
 import clientapp.view.coordinator.MainCoordinator;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -24,67 +25,100 @@ import javax.swing.JOptionPane;
  */
 public class AppointmentsController {
 
-    private final AppointmentsForm appointmentsForm;
+    private final AppointmentsForm form;
     private List<Appointment> appointments;
     private List<Salon> salons;
 
     public AppointmentsController(AppointmentsForm appointmentsForm) {
-        this.appointmentsForm = appointmentsForm;
+        this.form = appointmentsForm;
         addActionListeners();
     }
 
     private void addActionListeners() {
-        appointmentsForm.btnAddAppointmentActionListener(new ActionListener() { 
+        form.btnAddAppointmentActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int rowIndex = appointmentsForm.getTblAppointments().getSelectedRow();
-                if(rowIndex >= 0) {
-                    Long id = (Long) appointmentsForm.getTblAppointments().getValueAt(rowIndex, 0);
-                    for (Appointment a : appointments) {
-                        if(a.getAppointmentID() == id) {
-                            MainCoordinator.getInstance().addParam(Constant.SELECTED_APPOINTMENT, a);
-                            //MainCoordinator.getInstance().open
-                        }
-                    }
+                MainCoordinator.getInstance().openAddAppointmentForm();
+            }
+        });
+
+        form.cmbSalonPropertyChangeListener(
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e
+            ) {
+                Salon selectedSalon = (Salon) form.getCmbSalon().getSelectedItem();
+                if (selectedSalon != null) {
+                    fillTableAppointments(selectedSalon);
                 }
-                
+            }
+
+        }
+        );
+
+        form.btnViewAllActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fillTableAppointments(null);
+            }
+        }
+        );
+
+        form.btnEditAppointmentActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Long id = (Long) form.getTblAppointments().getValueAt(form.getTblAppointments().getSelectedRow(), 0);
+                MainCoordinator.getInstance().openEditAppointmentForm(id);
             }
         });
     }
 
     public void openForm() {
-        appointmentsForm.setVisible(true);
+        form.setVisible(true);
         prepareView();
 
     }
 
     private void prepareView() {
-        //fillComboSalon(); // ovo ne radi, dodaj kasnije
-        fillTableAppointments();
+        fillTableAppointments(null);
+        fillComboSalon();
     }
 
     private void fillComboSalon() {
         try {
-            appointmentsForm.getCmbSalon().removeAllItems();
-            appointmentsForm.getCmbSalon().setEnabled(false);
-            appointmentsForm.getCmbSalon().insertItemAt(null, 0);
+            form.getCmbSalon().removeAllItems();
+            form.getCmbSalon().setEnabled(false);
+            form.getCmbSalon().addItem(null);
             salons = Communication.getInstance().getAllSalons();
             for (Salon s : salons) {
-                appointmentsForm.getCmbSalon().addItem(s.toString());
+                form.getCmbSalon().addItem(s);
             }
+            form.getCmbSalon().setSelectedItem(null);
+            form.getCmbSalon().setEnabled(true);
+
         } catch (Exception ex) {
-            Logger.getLogger(AppointmentsController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AppointmentsController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void fillTableAppointments() {
+    private void fillTableAppointments(Salon filter) {
         try {
             appointments = Communication.getInstance().getAllAppointments();
             AppointmentTableModel model = new AppointmentTableModel(appointments);
-            appointmentsForm.getTblAppointments().setModel(model);
+            form.getTblAppointments().setModel(model);
+            TableRowSorter sorter = new TableRowSorter(model);
+            form.getTblAppointments().setRowSorter(sorter);
+            if (filter != null) {
+                sorter.setRowFilter(new RowFilter() {
+                    @Override
+                    public boolean include(RowFilter.Entry entry) {
+                        return entry.getStringValue(5).contains(filter.toString());
+                    }
+                });
+            }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(appointmentsForm, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
+            JOptionPane.showMessageDialog(form, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

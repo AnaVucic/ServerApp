@@ -1,8 +1,9 @@
 package clientapp.view.form;
 
+import commonlib.domain.Dog;
+import commonlib.domain.Person;
+import commonlib.domain.Salon;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -17,15 +18,19 @@ import javax.swing.JTextField;
  */
 public class EditAppointmentForm extends javax.swing.JFrame {
 
+    private final Long id;
+
     /**
      * Creates new form EditAppointmentForm
+     * @param id
      */
-    public EditAppointmentForm() {
+    public EditAppointmentForm(Long id) {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         final Calendar c = Calendar.getInstance();
-                
+        this.id = id;
+
     }
 
     /**
@@ -48,12 +53,12 @@ public class EditAppointmentForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtDate = new javax.swing.JFormattedTextField();
-        txtTime = new javax.swing.JFormattedTextField();
         cmbPerson = new javax.swing.JComboBox<>();
         cmbSalon = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         cmbDog = new javax.swing.JComboBox<>();
+        txtDate = new javax.swing.JTextField();
+        txtTime = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -61,7 +66,7 @@ public class EditAppointmentForm extends javax.swing.JFrame {
         txtTotalDuration = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtAppointmentId = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -128,12 +133,6 @@ public class EditAppointmentForm extends javax.swing.JFrame {
 
         jLabel5.setText("Salon");
 
-        txtDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
-        txtDate.setToolTipText("Dec 18, 2022");
-
-        txtTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getTimeInstance())));
-        txtTime.setToolTipText("2:35:54 PM");
-
         jLabel9.setText("Owner");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -142,24 +141,24 @@ public class EditAppointmentForm extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTime, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtDate)
+                            .addComponent(txtTime)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
                         .addGap(88, 88, 88)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbDog, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbSalon, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbDog, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbPerson, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
@@ -170,15 +169,15 @@ public class EditAppointmentForm extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbPerson, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
-                .addGap(44, 44, 44)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(cmbDog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(45, 45, 45)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(cmbSalon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(cmbDog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -241,7 +240,7 @@ public class EditAppointmentForm extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Appointment ID");
 
-        jTextField1.setEditable(false);
+        txtAppointmentId.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -254,10 +253,10 @@ public class EditAppointmentForm extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(150, 150, 150)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(131, 131, 131)
+                        .addGap(161, 161, 161)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtAppointmentId, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)))
                 .addContainerGap(400, Short.MAX_VALUE))
         );
@@ -267,7 +266,7 @@ public class EditAppointmentForm extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtAppointmentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
@@ -279,7 +278,6 @@ public class EditAppointmentForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
- 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
@@ -289,9 +287,9 @@ public class EditAppointmentForm extends javax.swing.JFrame {
     private javax.swing.JCheckBox chkStyle;
     private javax.swing.JCheckBox chkTeeth;
     private javax.swing.JCheckBox chkTrim;
-    private javax.swing.JComboBox<String> cmbDog;
-    private javax.swing.JComboBox<String> cmbPerson;
-    private javax.swing.JComboBox<String> cmbSalon;
+    private javax.swing.JComboBox<Dog> cmbDog;
+    private javax.swing.JComboBox<Person> cmbPerson;
+    private javax.swing.JComboBox<Salon> cmbSalon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -304,9 +302,9 @@ public class EditAppointmentForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JFormattedTextField txtDate;
-    private javax.swing.JFormattedTextField txtTime;
+    private javax.swing.JTextField txtAppointmentId;
+    private javax.swing.JTextField txtDate;
+    private javax.swing.JTextField txtTime;
     private javax.swing.JTextField txtTotalDuration;
     private javax.swing.JFormattedTextField txtTotalFee;
     // End of variables declaration//GEN-END:variables
@@ -367,46 +365,49 @@ public class EditAppointmentForm extends javax.swing.JFrame {
         this.chkTrim = chkTrim;
     }
 
-    public JComboBox<String> getCmbDog() {
-        return cmbSalon;
+    public JComboBox<Dog> getCmbDog() {
+        return cmbDog;
     }
 
-    public void setCmbDog(JComboBox<String> cmbDog) {
-        this.cmbSalon = cmbDog;
+    public void setCmbDog(JComboBox<Dog> cmbDog) {
+        this.cmbDog = cmbDog;
     }
 
-    public JComboBox<String> getCmbSalon() {
-        return cmbSalon;
-    }
-
-    public void setCmbSalon(JComboBox<String> cmbSalon) {
-        this.cmbSalon = cmbSalon;
-    }
-
-    public JComboBox<String> getCmbPerson() {
+    public JComboBox<Person> getCmbPerson() {
         return cmbPerson;
     }
 
-    public void setCmbPerson(JComboBox<String> cmbPerson) {
+    public void setCmbPerson(JComboBox<Person> cmbPerson) {
         this.cmbPerson = cmbPerson;
     }
 
-    public JFormattedTextField getTxtDate() {
+    public JComboBox<Salon> getCmbSalon() {
+        return cmbSalon;
+    }
+
+    public void setCmbSalon(JComboBox<Salon> cmbSalon) {
+        this.cmbSalon = cmbSalon;
+    }
+
+    public JTextField getTxtDate() {
         return txtDate;
     }
 
-    public void setTxtDate(JFormattedTextField txtDate) {
+    public void setTxtDate(JTextField txtDate) {
         this.txtDate = txtDate;
     }
 
-    public JFormattedTextField getTxtTime() {
+    public JTextField getTxtTime() {
         return txtTime;
     }
 
-    public void setTxtTime(JFormattedTextField txtTime) {
+    public void setTxtTime(JTextField txtTime) {
         this.txtTime = txtTime;
     }
 
+    
+
+    
     public JTextField getTxtTotalDuration() {
         return txtTotalDuration;
     }
@@ -422,26 +423,26 @@ public class EditAppointmentForm extends javax.swing.JFrame {
     public void setTxtTotalFee(JFormattedTextField txtTotalFee) {
         this.txtTotalFee = txtTotalFee;
     }
-    
-    
-    
-    //|
-    //|-----------------------------------------------------
-    //|
-    
-    public void btnSaveActionListener (ActionListener actionListener) {
+
+    public Long getId() {
+        return id;
+    }
+
+    public JTextField getTxtAppointmentId() {
+        return txtAppointmentId;
+    }
+
+    public void setTxtAppointmentId(JTextField txtAppointmentId) {
+        this.txtAppointmentId = txtAppointmentId;
+    }
+
+    // ACTION LISTENERS
+    public void btnSaveActionListener(ActionListener actionListener) {
         btnSave.addActionListener(actionListener);
     }
     
-    // da li dodati action listeners za combo box-ove?
-    
-    public void chkBathActionListener (ActionListener actionListener) {
-        chkBath.addActionListener(actionListener);
+    public void cmbPersonPropertyChangeListener(ActionListener actionListener) {
+        cmbPerson.addActionListener(actionListener);
     }
-      public void chkEarActionListener (ActionListener actionListener) {
-        chkEar.addActionListener(actionListener);
-    }
-    
-
 
 }

@@ -5,6 +5,7 @@
 package clientapp.view.form.component.table;
 
 import commonlib.domain.Appointment;
+import commonlib.domain.Salon;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,7 +56,7 @@ public class AppointmentTableModel extends AbstractTableModel {
             case 4:
                 return a.getDog().getPerson().getFirstname() + " " + a.getDog().getPerson().getLastname();
             case 5:
-                return a.getSalon().getAddress() + ", " + a.getSalon().getCity().getName();
+                return a.getSalon();
             case 6:
                 return a.getTotalFee();
             case 7:
@@ -87,7 +88,7 @@ public class AppointmentTableModel extends AbstractTableModel {
             case 4:
                 return String.class;
             case 5:
-                return String.class;
+                return Salon.class;
             case 6:
                 return BigDecimal.class;
             case 7:

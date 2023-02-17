@@ -1,9 +1,13 @@
 package clientapp.view.coordinator;
 
+import clientapp.view.controller.AddAppointmentController;
 import clientapp.view.controller.AppointmentsController;
+import clientapp.view.controller.EditAppointmentController;
 import clientapp.view.controller.LoginController;
 import clientapp.view.controller.MainController;
+import clientapp.view.form.AddAppointmentForm;
 import clientapp.view.form.AppointmentsForm;
+import clientapp.view.form.EditAppointmentForm;
 import clientapp.view.form.LoginForm;
 import clientapp.view.form.MainForm;
 import java.util.HashMap;
@@ -67,7 +71,14 @@ public class MainCoordinator {
     }
     
     // EDIT APPOINTMENT FORM
-    public void openEditAppointmentForm() {
-        
+    public void openEditAppointmentForm(Long id) {
+        EditAppointmentController editController = new EditAppointmentController(new EditAppointmentForm(id));
+        editController.openForm();
+    }
+    
+    // ADD APPOINTMENT FORM
+    public void openAddAppointmentForm() {
+        AddAppointmentController addController = new AddAppointmentController(new AddAppointmentForm());
+        addController.openForm();
     }
 }
