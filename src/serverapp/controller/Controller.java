@@ -14,6 +14,8 @@ import serverapp.operation.appointment.EditAppointment;
 import serverapp.operation.appointment.FindAppointments;
 import serverapp.operation.appointment.GetAllAppointments;
 import serverapp.operation.appointment.SaveAppointment;
+import serverapp.operation.appointment_service.DeleteAppointmentService;
+import serverapp.operation.appointment_service.SaveAppointmentService;
 import serverapp.operation.dog.FindDogs;
 import serverapp.operation.dog.GetAllDogs;
 import serverapp.operation.dog.SaveDog;
@@ -145,6 +147,18 @@ public class Controller {
     // EDIT APPOINTMENT
     public void editAppointment(GenericEntity param) throws Exception {
         GenericOperation genericOperation = new EditAppointment();
+        genericOperation.execute(param);
+    }
+    
+    // SAVE APPOINTMENT-SERVICE
+    public void saveAppointmentService(GenericEntity param) throws Exception {
+        GenericOperation genericOperation = new SaveAppointmentService();
+        genericOperation.execute(param);
+    }
+
+    // DELETE APPOINTMENT-SERVICE
+    public void deleteAppointmentService(GenericEntity param) throws Exception {
+        GenericOperation genericOperation = new DeleteAppointmentService();
         genericOperation.execute(param);
     }
 }

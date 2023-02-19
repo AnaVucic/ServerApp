@@ -64,7 +64,6 @@ public class ProcessRequests extends Thread {
                                 //MainCoordinator.getInstance().getFormMainController().refreshTbl();
                             }
                         } catch (Exception ex) {
-                            ex.printStackTrace();
                             response.setException(ex);
                         }
                         break;
@@ -73,7 +72,6 @@ public class ProcessRequests extends Thread {
                             List<GenericEntity> salons = Controller.getInstance().getAllSalons();
                             response.setResult(salons);
                         } catch (Exception ex) {
-                            ex.printStackTrace();
                             response.setException(ex);
                         }
                         break;
@@ -82,7 +80,6 @@ public class ProcessRequests extends Thread {
                             List<GenericEntity> dogs = Controller.getInstance().getAllDogs();
                             response.setResult(dogs);
                         } catch (Exception ex) {
-                            ex.printStackTrace();
                             response.setException(ex);
                         }
                         break;
@@ -91,7 +88,6 @@ public class ProcessRequests extends Thread {
                             List<GenericEntity> appointments = Controller.getInstance().getAllAppointments();
                             response.setResult(appointments);
                         } catch (Exception e) {
-                            e.printStackTrace();
                             response.setException(e);
                         }
                         break;
@@ -106,7 +102,6 @@ public class ProcessRequests extends Thread {
 
                             response.setResult(id);
                         } catch (Exception ex) {
-                            ex.printStackTrace();
                             response.setException(ex);
                         }
                         break;
@@ -116,7 +111,6 @@ public class ProcessRequests extends Thread {
                             response.setResult(services);
 
                         } catch (Exception e) {
-                            e.printStackTrace();
                             response.setException(e);
                         }
                         break;
@@ -125,7 +119,6 @@ public class ProcessRequests extends Thread {
                             List<GenericEntity> appointments = Controller.getInstance().findAppointments((GenericEntity) request.getParam());
                             response.setResult(appointments);
                         } catch (Exception e) {
-                            e.printStackTrace();
                             response.setException(e);
                         }
                         break;
@@ -135,7 +128,6 @@ public class ProcessRequests extends Thread {
                             response.setResult(persons);
 
                         } catch (Exception e) {
-                            e.printStackTrace();
                             response.setException(e);
                         }
                         break;
@@ -143,14 +135,26 @@ public class ProcessRequests extends Thread {
                             try {
                             Controller.getInstance().editAppointment((GenericEntity) request.getParam());
                         } catch (Exception ex) {
-                            ex.printStackTrace();
+                            response.setException(ex);
+                        }
+                        break;
+                        case SAVE_APPOINTMENT_SERVICE:
+                            try {
+                            Controller.getInstance().saveAppointmentService((GenericEntity) request.getParam());
+                        } catch (Exception ex) {
+                            response.setException(ex);
+                        }
+                        break;
+                        case DELETE_APPOINTMENT_SERVICE:
+                            try {
+                            Controller.getInstance().deleteAppointmentService((GenericEntity) request.getParam());
+                        } catch (Exception ex) {
                             response.setException(ex);
                         }
                         break;
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                     response.setException(e);
                 }
                 sender.send(response);
