@@ -8,7 +8,6 @@ import commonlib.domain.Appointment;
 import commonlib.domain.Salon;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -44,26 +43,17 @@ public class AppointmentTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Appointment a = appointments.get(rowIndex);
-        switch (columnIndex) {
-            case 0:
-                return a.getAppointmentID();
-            case 1:
-                return a.getDateTime().toLocalDate();
-            case 2:
-                return a.getDateTime().toLocalTime();
-            case 3:
-                return a.getDog().getName();
-            case 4:
-                return a.getDog().getPerson().getFirstname() + " " + a.getDog().getPerson().getLastname();
-            case 5:
-                return a.getSalon();
-            case 6:
-                return a.getTotalFee();
-            case 7:
-                return a.getTotalDuration();   
-            default:
-                return "n/a";
-        }
+        return switch (columnIndex) {
+            case 0 -> a.getAppointmentID();
+            case 1 -> a.getDateTime().toLocalDate();
+            case 2 -> a.getDateTime().toLocalTime();
+            case 3 -> a.getDog().getName();
+            case 4 -> a.getDog().getPerson().getFirstname() + " " + a.getDog().getPerson().getLastname();
+            case 5 -> a.getSalon();
+            case 6 -> a.getTotalFee();
+            case 7 -> a.getTotalDuration();
+            default -> "n/a";
+        };
     }
     
     @Override
@@ -97,6 +87,8 @@ public class AppointmentTableModel extends AbstractTableModel {
                 return String.class;
         }
     }
+    
+    // TODO impl fire table data changed
     
     public Appointment getAppointment (int rowIndex) {
         return appointments.get(rowIndex);

@@ -1,6 +1,7 @@
 package clientapp.communication;
 
 import commonlib.domain.Appointment;
+import commonlib.domain.AppointmentService;
 import commonlib.domain.Dog;
 import commonlib.domain.Person;
 import commonlib.domain.Salon;
@@ -178,6 +179,30 @@ public class Communication {
         
         if(response.getException() == null){
             
+        } else {
+            throw response.getException();
+        }
+    }
+
+    // SAVE APPOINTMENT-SERVICE
+    public void saveAppointmentService(AppointmentService as) throws Exception {
+        Request request = new Request(Operation.SAVE_APPOINTMENT_SERVICE, as);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+
+        if (response.getException() == null) {
+        } else {
+            throw response.getException();
+        }
+    }
+
+    // DELETE APPOINTMENT-SERVICE
+    public void removeAppointmentService(AppointmentService as) throws Exception {
+        Request request = new Request(Operation.DELETE_APPOINTMENT_SERVICE, as);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+
+        if (response.getException() == null) {
         } else {
             throw response.getException();
         }

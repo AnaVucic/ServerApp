@@ -12,7 +12,6 @@ import java.util.List;
 import clientapp.communication.Communication;
 import clientapp.view.coordinator.MainCoordinator;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -35,45 +34,28 @@ public class AppointmentsController {
     }
 
     private void addActionListeners() {
-        form.btnAddAppointmentActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainCoordinator.getInstance().openAddAppointmentForm();
+        form.btnAddAppointmentActionListener((ActionEvent e) -> {
+            MainCoordinator.getInstance().openAddAppointmentForm();
+        });
+
+        form.cmbSalonPropertyChangeListener((ActionEvent e) -> {
+            Salon selectedSalon = (Salon) form.getCmbSalon().getSelectedItem();
+            if (selectedSalon != null) {
+                fillTableAppointments(selectedSalon);
             }
         });
 
-        form.cmbSalonPropertyChangeListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e
-            ) {
-                Salon selectedSalon = (Salon) form.getCmbSalon().getSelectedItem();
-                if (selectedSalon != null) {
-                    fillTableAppointments(selectedSalon);
-                }
-            }
+        form.btnViewAllActionListener((ActionEvent e) -> {
+            fillTableAppointments(null);
+        });
 
-        }
-        );
-
-        form.btnViewAllActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fillTableAppointments(null);
-            }
-        }
-        );
-
-        form.btnEditAppointmentActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = form.getTblAppointments().getSelectedRow();
-                if (row != -1) {
-                    Long id = (Long) form.getTblAppointments().getValueAt(row, 0);
-                    MainCoordinator.getInstance().openEditAppointmentForm(id);
-                } else {
-                    JOptionPane.showMessageDialog(form, "You must select an appointment to edit.","Select an appointment",JOptionPane.INFORMATION_MESSAGE);
-                }
+        form.btnEditAppointmentActionListener((ActionEvent e) -> {
+            int row = form.getTblAppointments().getSelectedRow();
+            if (row != -1) {
+                Long id = (Long) form.getTblAppointments().getValueAt(row, 0);
+                MainCoordinator.getInstance().openEditAppointmentForm(id);
+            } else {
+                JOptionPane.showMessageDialog(form, "You must select an appointment to edit.","Select an appointment",JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }

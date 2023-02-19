@@ -2,18 +2,23 @@ package clientapp.view.controller;
 
 import clientapp.communication.Communication;
 import clientapp.view.form.EditAppointmentForm;
+import clientapp.view.form.component.table.ServiceTableModel;
 import commonlib.domain.Appointment;
 import commonlib.domain.AppointmentService;
 import commonlib.domain.Dog;
 import commonlib.domain.Person;
 import commonlib.domain.Salon;
 import commonlib.domain.Service;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,41 +45,69 @@ public class EditAppointmentController {
     }
 
     private void addActionListeners() {
-        form.btnSaveActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    validateAppointment();
-                    generateAppointment();
-                    Communication.getInstance().editAppointment(appointment);
-                    for(Service s:appointment.getServices()){
-                        AppointmentService as = new AppointmentService();
-                        as.setAppointment(appointment.getAppointmentID());
-                        as.setService(s.getServiceID());
-                        
-                    }
-                    //Communication.getInstance().editAppointmentService();
-                    JOptionPane.showMessageDialog(form, "System has changed appointment with ID: " + appointment.getAppointmentID() + "!", "Message", JOptionPane.INFORMATION_MESSAGE);
-                    form.dispose();
-                } catch (ParseException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(form, "Invaid date and/or time input(s)" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(form, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-
+        form.btnSaveActionListener((ActionEvent e) -> {
+            try {
+                validateAppointment();
+                generateAppointment();
+                Communication.getInstance().editAppointment(appointment);
+                JOptionPane.showMessageDialog(form, "System has changed appointment with ID: " + appointment.getAppointmentID() + "!", "Message", JOptionPane.INFORMATION_MESSAGE);
+                form.dispose();
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(form, "Invaid date and/or time input(s)" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(form, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+        });
 
-        }
-        );
+        form.cmbPersonPropertyChangeListener((ActionEvent e) -> {
+            Person newPerson = (Person) form.getCmbPerson().getSelectedItem();
+            fillComboDog();
+            form.getCmbDog().setSelectedIndex(1);
+        });
 
-        form.cmbPersonPropertyChangeListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Person newPerson = (Person) form.getCmbPerson().getSelectedItem();
-                fillComboDog();
-                form.getCmbDog().setSelectedIndex(1);
+        form.btnIncludeActionListener((ActionEvent e) -> {
+            int row = form.getTblServices().getSelectedRow();
+            if (row == -1 || form.getTblServices().getValueAt(row, 4) == Boolean.TRUE) {
+                System.out.println("This service is already included or no service is selected");
+            } else {
+                AppointmentService as = new AppointmentService();
+                as.setAppointment(appointment.getAppointmentID());
+                as.setService((Long) form.getTblServices().getValueAt(row, 0));
+                try {
+                    Communication.getInstance().saveAppointmentService(as);
+
+                } catch (Exception ex) {
+                    Logger.getLogger(EditAppointmentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Service newService = ((ServiceTableModel) form.getTblServices().getModel()).getService(row);
+                appointment.getServices().add(newService);
+                form.getTxtTotalDuration().setText(String.valueOf(Integer.parseInt(form.getTxtTotalDuration().getText()) + newService.getDuration()));
+                form.getTxtTotalFee().setText(String.valueOf(newService.getFee().add(new BigDecimal(form.getTxtTotalFee().getText()))));
+                form.getTblServices().setValueAt(Boolean.TRUE, row, 4);
+                ((ServiceTableModel) form.getTblServices().getModel()).fireTableCellUpdated(row, 4);
+            }
+        });
+
+        form.btnExcludeActionListener((ActionEvent) -> {
+            System.out.println(appointment.getServices().size());
+            int row = form.getTblServices().getSelectedRow();
+            if (row == -1 || form.getTblServices().getValueAt(row, 4) == Boolean.FALSE || appointment.getServices().size() == 1) {
+                System.out.println("This service is already excluded or no service is selected");
+            } else {
+                AppointmentService as = new AppointmentService();
+                as.setAppointment(appointment.getAppointmentID());
+                as.setService((Long) form.getTblServices().getValueAt(row, 0));
+                try {
+                    Communication.getInstance().removeAppointmentService(as);
+                } catch (Exception ex) {
+                    Logger.getLogger(EditAppointmentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Service oldService = ((ServiceTableModel) form.getTblServices().getModel()).getService(row);
+                appointment.getServices().remove(oldService);
+                form.getTxtTotalDuration().setText(String.valueOf(Integer.parseInt(form.getTxtTotalDuration().getText()) - oldService.getDuration()));
+                form.getTxtTotalFee().setText(String.valueOf(new BigDecimal(form.getTxtTotalFee().getText()).subtract(oldService.getFee())));
+                form.getTblServices().setValueAt(Boolean.FALSE, row, 4);
+                ((ServiceTableModel) form.getTblServices().getModel()).fireTableCellUpdated(row, 4);
             }
         });
 
@@ -96,15 +129,6 @@ public class EditAppointmentController {
             error += "Dog must be selected!\n";
         }
 
-        if (form.getChkBath().isSelected() == false
-                && form.getChkEar().isSelected() == false
-                && form.getChkNail().isSelected() == false
-                && form.getChkStyle().isSelected() == false
-                && form.getChkTeeth().isSelected() == false
-                && form.getChkTrim().isSelected() == false) {
-            error += "At least one service must be selected!\n";
-        }
-
         if (form.getTxtDate().getText().isEmpty()) {
             error += "Date must be filled!\n";
         }
@@ -121,41 +145,15 @@ public class EditAppointmentController {
 
     private void generateAppointment() throws ParseException, Exception {
         String dateTimeString = form.getTxtDate().getText() + " " + form.getTxtTime().getText();
-        Date dateTime;
-        try {
-            dateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateTimeString);
-        } catch (ParseException ex) {
-            throw ex;
-        }
-        appointment.setDateTime(dateTime.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d H:m");
+        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
+        appointment.setDateTime(dateTime);
 
         appointment.setDog((Dog) form.getCmbDog().getSelectedItem());
         appointment.setSalon((Salon) form.getCmbSalon().getSelectedItem());
 
         List<Service> newServices = new ArrayList<Service>();
-        if (form.getChkBath().isSelected()) {
-            newServices.add(services.get(0));
-        }
-        if (form.getChkTrim().isSelected()) {
-            newServices.add(services.get(1));
-        }
-        if (form.getChkNail().isSelected()) {
-            newServices.add(services.get(2));
-        }
-        if (form.getChkEar().isSelected()) {
-            newServices.add(services.get(3));
-        }
-        if (form.getChkTeeth().isSelected()) {
-            newServices.add(services.get(4));
-        }
-        if (form.getChkStyle().isSelected()) {
-            newServices.add(services.get(5));
-        }
-        if (newServices.size() == 0) {
-            throw new Exception("Choose at least one service.");
-        }
+
         appointment.setServices(newServices);
         int duration = 0;
         BigDecimal fee = new BigDecimal(0);
@@ -171,16 +169,19 @@ public class EditAppointmentController {
 
     public void openForm() {
         form.setVisible(true);
-        prepareAppointment();
+        form.setLocationRelativeTo(null);
+        form.setExtendedState(Frame.MAXIMIZED_BOTH);
+        prepareID();
         prepareForm();
     }
 
-    private void prepareAppointment() {
+    private void prepareID() {
         Long id = form.getId();
         Appointment a = new Appointment();
         a.setAppointmentID(id);
         try {
             appointment = (Appointment) Communication.getInstance().findAppointments(a).get(0);
+            form.getTxtAppointmentId().setText(appointment.getAppointmentID().toString());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(form, "Error while getting the appointment\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             form.dispose();
@@ -188,32 +189,19 @@ public class EditAppointmentController {
     }
 
     private void prepareForm() {
-        form.getTxtAppointmentId().setText(appointment.getAppointmentID().toString());
-        getServices();
-        prepareServices();
+        fillTableServices();
         perpareComboBoxes();
+        fillFieldsDateTime();
+        fillFieldsDurationFee();
     }
 
-    private void prepareServices() {
-        for (Service s : appointment.getServices()) {
-            if (s.getName().equals("bath")) {
-                form.getChkBath().setSelected(true);
-            }
-            if (s.getName().equals("trimming")) {
-                form.getChkTrim().setSelected(true);
-            }
-            if (s.getName().equals("nail care")) {
-                form.getChkNail().setSelected(true);
-            }
-            if (s.getName().equals("ear care")) {
-                form.getChkEar().setSelected(true);
-            }
-            if (s.getName().equals("teeth care")) {
-                form.getChkTeeth().setSelected(true);
-            }
-            if (s.getName().equals("styling")) {
-                form.getChkStyle().setSelected(true);
-            }
+    private void fillTableServices() {
+        try {
+            services = Communication.getInstance().getAllServices();
+            ServiceTableModel model = new ServiceTableModel(services, appointment.getServices());
+            form.getTblServices().setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(form, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -221,8 +209,6 @@ public class EditAppointmentController {
         fillComboOwner();
         fillComboDog();
         fillComboSalon();
-        fillFieldsDateTime();
-        fillFieldsDurationFee();
     }
 
     private void fillComboOwner() {
@@ -282,25 +268,14 @@ public class EditAppointmentController {
     }
 
     private void fillFieldsDateTime() {
-        String date = appointment.getDateTime().getDayOfMonth() + "/"
-                + appointment.getDateTime().getMonth().getValue() + "/"
-                + appointment.getDateTime().getYear();
-        form.getTxtDate().setText(date);
-        String time = appointment.getDateTime().getHour() + ":"
-                + appointment.getDateTime().getMinute();
-        form.getTxtTime().setText(time);
+        LocalDate date = appointment.getDateTime().toLocalDate();
+        LocalTime time = appointment.getDateTime().toLocalTime();
+        form.getTxtDate().setText(date.toString());
+        form.getTxtTime().setText(time.toString());
     }
 
     private void fillFieldsDurationFee() {
         form.getTxtTotalDuration().setText(String.valueOf(appointment.getTotalDuration()));
         form.getTxtTotalFee().setText(appointment.getTotalFee().toString());
-    }
-
-    private void getServices() {
-        try {
-            services = Communication.getInstance().getAllServices();
-        } catch (Exception ex) {
-            System.out.println("Exception while getting esrvices. " + ex.getMessage());
-        }
     }
 }
