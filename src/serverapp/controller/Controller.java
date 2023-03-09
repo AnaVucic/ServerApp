@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import serverapp.constant.Constant;
 import serverapp.operation.GenericOperation;
+import serverapp.operation.appointment.DeleteAppointment;
 import serverapp.operation.appointment.EditAppointment;
 import serverapp.operation.appointment.FindAppointments;
 import serverapp.operation.appointment.GetAllAppointments;
@@ -159,6 +160,12 @@ public class Controller {
     // DELETE APPOINTMENT-SERVICE
     public void deleteAppointmentService(GenericEntity param) throws Exception {
         GenericOperation genericOperation = new DeleteAppointmentService();
+        genericOperation.execute(param);
+    }
+    
+    // DELETE APPOINTMENT
+    public void deleteAppointment(GenericEntity param) throws Exception {
+        GenericOperation genericOperation = new DeleteAppointment();
         genericOperation.execute(param);
     }
 }
