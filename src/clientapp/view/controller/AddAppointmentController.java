@@ -13,11 +13,10 @@ import commonlib.domain.Service;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -28,14 +27,16 @@ import javax.swing.JOptionPane;
 public class AddAppointmentController {
 
     private final AddAppointmentForm form;
+    private final AppointmentsController parentController;
     private List<Dog> dogs;
     private List<Salon> salons;
     private List<Service> services;
     private Appointment appointment;
     private Long id;
 
-    public AddAppointmentController(AddAppointmentForm form) {
+    public AddAppointmentController(AddAppointmentForm form, AppointmentsController parentController) {
         this.form = form;
+        this.parentController = parentController;
         addActionListeners();
     }
 
@@ -48,26 +49,31 @@ public class AddAppointmentController {
                     addAppointment(appointment);
                     appointment.setAppointmentID(id);
                     JOptionPane.showMessageDialog(form, "Saved appointment with ID: " + appointment.getAppointmentID(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                    parentController.fillTableAppointments(null, null, null);
                     form.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(form, "System was unable to save appointment with given parameters", "Failure", JOptionPane.WARNING_MESSAGE);
                 }
                 System.out.println(appointment);
             }
 
             private boolean validateFields() {
-                boolean valid = false;
+                boolean valid = true;
+                String error = "";
                 try {
                     String dateTimeString = form.getTxtDate().getText() + " " + form.getTxtTime().getText();
-                    Date dateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateTimeString);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d H:m");
+                    LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
 
                     Dog dog = (Dog) form.getCmbDog().getSelectedItem();
 
                     Salon salon = (Salon) form.getCmbSalon().getSelectedItem();
 
                     if (dog == null) {
-                        throw new Exception("Choose a dog.");
+                        error = "Choose a dog.";
                     }
                     if (salon == null) {
-                        throw new Exception("Choose a salon");
+                        error += "\nChoose a salon.";
                     }
                     List<Service> selectedServices = new ArrayList<>();
 
@@ -89,30 +95,28 @@ public class AddAppointmentController {
                     if (form.getCbxStyling().isSelected()) {
                         selectedServices.add(services.get(5));
                     }
-                    if (selectedServices.size() == 0) {
-                        throw new Exception("Choose at least one service.");
+                    if (selectedServices.isEmpty()) {
+                        error += "\nChoose at least one service.";
                     }
-                    valid = true;
-                    constructAppointment(dateTime, dog, salon, selectedServices);
-                    calculateDuarionAndFee();
-                } catch (IllegalArgumentException e) {
-                    JOptionPane.showMessageDialog(form, e.getMessage());
-                    appointment = null;
-                } catch (ParseException e) {
-                    JOptionPane.showMessageDialog(form, e.getMessage());
-                    appointment = null;
-                } catch (Exception ex) {
+                    if (!error.equals("")) {
+                        valid = false;
+                        JOptionPane.showMessageDialog(form, error);
+                        appointment = null;
+                    } else {
+                        constructAppointment(dateTime, dog, salon, selectedServices);
+                        calculateDuarionAndFee();
+                    }
+                } catch (IllegalArgumentException | DateTimeParseException ex) {
+                    valid = false;
                     JOptionPane.showMessageDialog(form, ex.getMessage());
                     appointment = null;
                 }
                 return valid;
             }
 
-            private void constructAppointment(Date dateTime, Dog dog, Salon salon, List<Service> services) {
+            private void constructAppointment(LocalDateTime dateTime, Dog dog, Salon salon, List<Service> services) {
                 appointment = new Appointment();
-                appointment.setDateTime(dateTime.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime());
+                appointment.setDateTime(dateTime);
                 appointment.setDog(dog);
                 appointment.setSalon(salon);
                 appointment.setTotalDuration(0);
@@ -131,8 +135,8 @@ public class AddAppointmentController {
             private void calculateDuarionAndFee() {
                 int duration = 0;
                 BigDecimal fee = new BigDecimal(0);
-                for(Service s: appointment.getServices()){
-                    duration+=s.getDuration();
+                for (Service s : appointment.getServices()) {
+                    duration += s.getDuration();
                     fee = fee.add(s.getFee());
                 }
                 System.out.println("Duration: " + duration);

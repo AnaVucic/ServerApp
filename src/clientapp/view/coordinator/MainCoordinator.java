@@ -71,14 +71,14 @@ public class MainCoordinator {
     }
     
     // EDIT APPOINTMENT FORM
-    public void openEditAppointmentForm(Long id) {
-        EditAppointmentController editController = new EditAppointmentController(new EditAppointmentForm(id));
+    public void openEditAppointmentForm(Long id, AppointmentsController parentController) {
+        EditAppointmentController editController = new EditAppointmentController(new EditAppointmentForm(id, parentController));
         editController.openForm();
     }
     
     // ADD APPOINTMENT FORM
-    public void openAddAppointmentForm() {
-        AddAppointmentController addController = new AddAppointmentController(new AddAppointmentForm());
+    public void openAddAppointmentForm(AppointmentsController parentController) {
+        AddAppointmentController addController = new AddAppointmentController(new AddAppointmentForm(), parentController);
         addController.openForm();
     }
 }

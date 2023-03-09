@@ -12,6 +12,8 @@ import java.util.List;
 import clientapp.communication.Communication;
 import clientapp.view.coordinator.MainCoordinator;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -35,27 +37,66 @@ public class AppointmentsController {
 
     private void addActionListeners() {
         form.btnAddAppointmentActionListener((ActionEvent e) -> {
-            MainCoordinator.getInstance().openAddAppointmentForm();
+            MainCoordinator.getInstance().openAddAppointmentForm(this);
         });
 
         form.cmbSalonPropertyChangeListener((ActionEvent e) -> {
             Salon selectedSalon = (Salon) form.getCmbSalon().getSelectedItem();
             if (selectedSalon != null) {
-                fillTableAppointments(selectedSalon);
+                fillTableAppointments(selectedSalon, null, null);
             }
         });
 
         form.btnViewAllActionListener((ActionEvent e) -> {
-            fillTableAppointments(null);
+            fillTableAppointments(null, null, null);
         });
 
         form.btnEditAppointmentActionListener((ActionEvent e) -> {
             int row = form.getTblAppointments().getSelectedRow();
             if (row != -1) {
                 Long id = (Long) form.getTblAppointments().getValueAt(row, 0);
-                MainCoordinator.getInstance().openEditAppointmentForm(id);
+                MainCoordinator.getInstance().openEditAppointmentForm(id, this);
             } else {
-                JOptionPane.showMessageDialog(form, "You must select an appointment to edit.","Select an appointment",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(form, "You must select an appointment to edit.", "Select an appointment", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        form.btnDateDisplayActionListener((ActionEvent e) -> {  // OVDE!!!!!!!!!!!!
+            try {
+                Salon selectedSalon = (Salon) form.getCmbSalon().getSelectedItem();
+
+                String fromString = form.getTxtDateFrom().getText();
+                String toString = form.getTxtDateTo().getText();
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+
+                LocalDate fromDate = LocalDate.parse(fromString, formatter);
+                LocalDate toDate = LocalDate.parse(toString, formatter);
+                
+                if (selectedSalon != null) {
+                    fillTableAppointments(selectedSalon, fromDate, toDate);
+                } else {
+                    fillTableAppointments(null, fromDate, toDate);
+                }
+               
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(form, "Unable to parse date.\n" + ex.getMessage());
+            }
+        });
+
+        form.btnDeleteAppointmentActionListener((ActionEvent e) -> {
+            int row = form.getTblAppointments().getSelectedRow();
+            if (row != -1) {
+                AppointmentTableModel atm = (AppointmentTableModel) (form.getTblAppointments().getModel());
+                Appointment a = atm.getAppointment(row);
+                try {
+                    Communication.getInstance().removeAppointment(a);
+                } catch (Exception ex) {
+                    Logger.getLogger(AppointmentsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(form, "System has successfully deleted appointment with id " + a.getAppointmentID());
+                fillTableAppointments(null, null, null);
+            } else {
+                JOptionPane.showMessageDialog(form, "You must select an appointment to delete.", "Select an appointment", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
@@ -67,7 +108,7 @@ public class AppointmentsController {
     }
 
     private void prepareView() {
-        fillTableAppointments(null);
+        fillTableAppointments(null, null, null);
         fillComboSalon();
     }
 
@@ -89,18 +130,32 @@ public class AppointmentsController {
         }
     }
 
-    private void fillTableAppointments(Salon filter) {
+    public void fillTableAppointments(Salon filter, LocalDate from, LocalDate to) {
         try {
             appointments = Communication.getInstance().getAllAppointments();
             AppointmentTableModel model = new AppointmentTableModel(appointments);
             form.getTblAppointments().setModel(model);
             TableRowSorter sorter = new TableRowSorter(model);
             form.getTblAppointments().setRowSorter(sorter);
+            
+            
+            // FILTERI TREBA DA SE IMPL PREKO UPITA NAD BAZOM
+            
             if (filter != null) {
                 sorter.setRowFilter(new RowFilter() {
                     @Override
                     public boolean include(RowFilter.Entry entry) {
                         return entry.getStringValue(5).contains(filter.toString());
+                    }
+                });
+            }
+            if (from != null && to != null) {
+                sorter.setRowFilter(new RowFilter() {
+                    @Override
+                    public boolean include(RowFilter.Entry entry) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+                        LocalDate date = LocalDate.parse(entry.getStringValue(1), formatter);
+                        return date.isAfter(from.minusDays(1l)) && date.isBefore(to.plusDays(1l));
                     }
                 });
             }

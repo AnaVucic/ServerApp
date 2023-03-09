@@ -13,14 +13,11 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,17 +47,17 @@ public class EditAppointmentController {
                 validateAppointment();
                 generateAppointment();
                 Communication.getInstance().editAppointment(appointment);
+                form.getParentController().fillTableAppointments(null, null, null);
                 JOptionPane.showMessageDialog(form, "System has changed appointment with ID: " + appointment.getAppointmentID() + "!", "Message", JOptionPane.INFORMATION_MESSAGE);
                 form.dispose();
             } catch (ParseException ex) {
                 JOptionPane.showMessageDialog(form, "Invaid date and/or time input(s)" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(form, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(form, "System has not changed the appointment\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         form.cmbPersonPropertyChangeListener((ActionEvent e) -> {
-            Person newPerson = (Person) form.getCmbPerson().getSelectedItem();
             fillComboDog();
             form.getCmbDog().setSelectedIndex(1);
         });

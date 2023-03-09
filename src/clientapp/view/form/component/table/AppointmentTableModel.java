@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package clientapp.view.form.component.table;
 
 import commonlib.domain.Appointment;
@@ -89,6 +85,7 @@ public class AppointmentTableModel extends AbstractTableModel {
     }
     
     // TODO impl fire table data changed
+    
     
     public Appointment getAppointment (int rowIndex) {
         return appointments.get(rowIndex);

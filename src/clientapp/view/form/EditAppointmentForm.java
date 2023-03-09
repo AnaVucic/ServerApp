@@ -1,5 +1,6 @@
 package clientapp.view.form;
 
+import clientapp.view.controller.AppointmentsController;
 import commonlib.domain.Dog;
 import commonlib.domain.Person;
 import commonlib.domain.Salon;
@@ -21,17 +22,19 @@ import javax.swing.ListSelectionModel;
 public class EditAppointmentForm extends javax.swing.JFrame {
 
     private final Long id;
+    private final AppointmentsController parentController;
 
     /**
      * Creates new form EditAppointmentForm
      * @param id
      */
-    public EditAppointmentForm(Long id) {
+    public EditAppointmentForm(Long id, AppointmentsController parentController) {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getTblServices().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.id = id;
+        this.parentController = parentController;
 
     }
 
@@ -398,6 +401,10 @@ public class EditAppointmentForm extends javax.swing.JFrame {
 
     public Long getId() {
         return id;
+    }
+    
+    public AppointmentsController getParentController(){
+        return parentController;
     }
 
     public JTextField getTxtAppointmentId() {

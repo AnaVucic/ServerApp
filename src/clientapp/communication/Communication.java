@@ -207,4 +207,16 @@ public class Communication {
             throw response.getException();
         }
     }
+    
+    // DELETE APPOINTMENT
+    public void removeAppointment(Appointment a) throws Exception {
+        Request request = new Request(Operation.DELETE_APPOINTMENT, a);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+
+        if (response.getException() == null) {
+        } else {
+            throw response.getException();
+        }
+    }
 }
