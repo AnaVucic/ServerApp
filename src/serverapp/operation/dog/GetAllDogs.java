@@ -4,6 +4,7 @@
  */
 package serverapp.operation.dog;
 
+import commonlib.domain.Breed;
 import commonlib.domain.Dog;
 import commonlib.domain.GenericEntity;
 import commonlib.domain.Person;
@@ -34,6 +35,9 @@ public class GetAllDogs extends GenericOperation {
 
             GenericEntity entityPerson = (GenericEntity) repository.getOne(dog.getPerson());
             dog.setPerson((Person) entityPerson);
+            
+            GenericEntity entityBreed = (GenericEntity) repository.getOne(dog.getBreed());
+            dog.setBreed((Breed) entityBreed);
             
         }
     }

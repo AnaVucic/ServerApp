@@ -1,6 +1,7 @@
 package serverapp.controller;
 
 import commonlib.domain.Appointment;
+import commonlib.domain.Breed;
 import commonlib.domain.Dog;
 import commonlib.domain.GenericEntity;
 import commonlib.domain.Person;
@@ -17,6 +18,8 @@ import serverapp.operation.appointment.GetAllAppointments;
 import serverapp.operation.appointment.SaveAppointment;
 import serverapp.operation.appointment_service.DeleteAppointmentService;
 import serverapp.operation.appointment_service.SaveAppointmentService;
+import serverapp.operation.breed.GetAllBreeds;
+import serverapp.operation.dog.DeleteDog;
 import serverapp.operation.dog.FindDogs;
 import serverapp.operation.dog.GetAllDogs;
 import serverapp.operation.dog.SaveDog;
@@ -167,5 +170,18 @@ public class Controller {
     public void deleteAppointment(GenericEntity param) throws Exception {
         GenericOperation genericOperation = new DeleteAppointment();
         genericOperation.execute(param);
+    }
+
+    // DELETE DOG
+    public void deleteDog(GenericEntity param) throws Exception {
+        GenericOperation genericOperation = new DeleteDog();
+        genericOperation.execute(param);
+    }
+
+    // GET ALL BREEDS
+    public List<GenericEntity> getAllBreeds() throws Exception {
+        GenericOperation genericOperation = new GetAllBreeds();
+        genericOperation.execute(new Breed());
+        return ((GetAllBreeds) genericOperation).getList();
     }
 }

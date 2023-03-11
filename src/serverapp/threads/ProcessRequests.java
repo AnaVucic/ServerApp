@@ -158,6 +158,39 @@ public class ProcessRequests extends Thread {
                         } catch (Exception ex) {
                             response.setException(ex);
                         }
+                        break;
+                        case FIND_DOGS:
+                            try {
+                            List<GenericEntity> dogs = Controller.getInstance().findDogs((GenericEntity) request.getParam());
+                            response.setResult(dogs);
+                        } catch (Exception e) {
+                            response.setException(e);
+                        }
+                        break;
+                        case DELETE_DOG:
+                            try {
+                            Controller.getInstance().deleteDog((GenericEntity) request.getParam());
+                        } catch (Exception ex) {
+                            response.setException(ex);
+                        }
+                        break;
+                        case GET_ALL_BREEDS:
+                            try {
+                            List<GenericEntity> breeds = Controller.getInstance().getAllBreeds();
+                            response.setResult(breeds);
+
+                        } catch (Exception e) {
+                            response.setException(e);
+                        }
+                        break;
+                        case SAVE_DOG:
+                            try {
+                            Long id = Controller.getInstance().saveDog((GenericEntity) request.getParam());
+                            response.setResult(id);
+                        } catch (Exception ex) {
+                            response.setException(ex);
+                        }
+                        break;
                     }
 
                 } catch (Exception e) {
